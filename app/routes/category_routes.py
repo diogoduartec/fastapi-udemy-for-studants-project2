@@ -16,3 +16,13 @@ def add_category(
     uc = CategoryUseCases(db_session=db_session)
     uc.add_category(category=category)
     return Response(status_code=status.HTTP_201_CREATED)
+
+
+@router.get('/list')
+def list_categories(
+    db_session: Session = Depends(get_db_session)
+):
+    uc = CategoryUseCases(db_session=db_session)
+    response = uc.list_categories()
+
+    return response
