@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "project2"
+version = "0.1.0"
+description = ""
+authors = ["Diogo Duarte <duartediogo98@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.92.0"
+uvicorn = "^0.20.0"
+sqlalchemy = "^2.0.4"
+psycopg2-binary = "^2.9.5"
+pytest = "^7.2.1"
+alembic = "^1.9.4"
+python-decouple = "^3.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
