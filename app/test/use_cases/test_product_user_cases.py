@@ -26,6 +26,9 @@ def test_add_product_uc(db_session, categories_on_db):
     assert product_on_db.stock == product.stock
     assert product_on_db.category.name == categories_on_db[0].name
 
+    db_session.delete(product_on_db)
+    db_session.commit()
+
 
 def test_add_product_uc_invalid_category(db_session):
     uc = ProductUseCases(db_session)
