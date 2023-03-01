@@ -22,4 +22,4 @@ class Product(Base):
     created_at = Column('created_at', DateTime, server_default=func.now())
     updated_at = Column('updated_at', DateTime, onupdate=func.now())
     category_id = Column('category_id', ForeignKey('categories.id'), nullable=False)
-    category = relationship('Catagory', back_populates='products')
+    category = relationship('Category', back_populates='products')
