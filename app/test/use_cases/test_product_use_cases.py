@@ -105,3 +105,17 @@ def test_list_products(db_session, products_on_db):
     assert type(products[0]) == ProductOutput
     assert products[0].name == products_on_db[0].name
     assert products[0].category.name == products_on_db[0].category.name
+
+
+def test_list_products_with_search(db_session, products_on_db):
+    uc = ProductUseCases(db_session=db_session)
+    
+    products = uc.list_products(search='mike')
+    
+    for product in products_on_db:
+        db_session.refresh(product)
+
+    assert len(products) == 3
+    assert type(products[0]) == ProductOutput
+    assert products[0].name == products_on_db[0].name
+    assert products[0].category.name == products_on_db[0].category.name
