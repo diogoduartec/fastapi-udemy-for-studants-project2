@@ -42,3 +42,37 @@ def test_add_product_uc_invalid_category(db_session):
 
     with pytest.raises(HTTPException):
         uc.add_product(product=product, category_slug='invalid')
+
+
+def test_update_product(db_session, product_on_db):
+    product = Product(
+        name='Camisa Mike',
+        slug='camisa-mike',
+        price=22.99,
+        stock=22
+    )
+
+    uc = ProductUseCases(db_session=db_session)
+    uc.update_product(id=product_on_db.id, product=product)
+
+    product_updated_on_db = db_session.query(ProductModel).filter_by(id=product_on_db.id).first()
+
+    assert product_updated_on_db is not None
+    assert product_updated_on_db.name == product.name
+    assert product_updated_on_db.slug == product.slug
+    assert product_updated_on_db.price == product.price
+    assert product_updated_on_db.stock == product.stock
+
+
+def test_update_product_invalid_id(db_session):
+    product = Product(
+        name='Camisa Mike',
+        slug='camisa-mike',
+        price=22.99,
+        stock=22
+    )
+
+    uc = ProductUseCases(db_session=db_session)
+
+    with pytest.raises(HTTPException):
+        uc.update_product(id=1, product=product)
