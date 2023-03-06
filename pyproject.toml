@@ -15,8 +15,6 @@ pytest = "^7.2.1"
 alembic = "^1.9.4"
 python-decouple = "^3.7"
 httpx = "^0.23.3"
-passlib = "^1.7.4"
-python-jose = "^3.3.0"
 
 
 [build-system]
