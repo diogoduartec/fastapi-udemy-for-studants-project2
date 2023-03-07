@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import APIRouter, Response, Depends, status
 from sqlalchemy.orm import Session
-from app.routes.deps import get_db_session
+from app.routes.deps import get_db_session, auth
 from app.use_cases.product import ProductUseCases
 from app.schemas.product import Product, ProductInput, ProductOutput
 
 
-router = APIRouter(prefix='/product', tags=['Product'])
+router = APIRouter(prefix='/product', tags=['Product'], dependencies=[Depends(auth)])
 
 
 @router.post('/add', status_code=status.HTTP_201_CREATED, description='Add new product')
