@@ -5,6 +5,9 @@ from app.main import app
 
 
 client = TestClient(app)
+headers = {"Authorization": "Bearer token"}
+client.headers = headers
+
 
 def test_add_product_route(db_session, categories_on_db):
     body = {

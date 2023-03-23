@@ -20,6 +20,7 @@ def test_register_user_route(db_session):
     assert user_on_db is not None
 
     db_session.delete(user_on_db)
+    db_session.commit()
 
 
 def test_register_user_route_user_alreday_exists(user_on_db):
