@@ -15,12 +15,8 @@ class CategoryUseCases:
         self.db_session.commit()
 
     def list_categories(self):
-        categories_on_db = self.db_session.query(CategoryModel).all()
-        categories_output = [
-            self.serialize_category(category_model)
-            for category_model in categories_on_db
-        ]
-        return categories_output
+        categories_on_db = self.db_session.query(CategoryModel)
+        return categories_on_db
 
     def delete_category(self, id: int):
         category_model = self.db_session.query(CategoryModel).filter_by(id=id).first()

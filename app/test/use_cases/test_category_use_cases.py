@@ -28,13 +28,9 @@ def test_add_category_uc(db_session):
 def test_list_categories(db_session, categories_on_db):
     uc = CategoryUseCases(db_session=db_session)
 
-    categories = uc.list_categories()
+    categories_query = uc.list_categories()
 
-    assert len(categories) == 4
-    assert type(categories[0]) == CategoryOutput
-    assert categories[0].id == categories_on_db[0].id
-    assert categories[0].name == categories_on_db[0].name
-    assert categories[0].slug == categories_on_db[0].slug
+    assert len(categories_query.all()) == len(categories_on_db)
 
 
 def test_delete_category(db_session):

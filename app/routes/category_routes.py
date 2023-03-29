@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from app.schemas.category import Category, CategoryOutput
 from app.routes.deps import get_db_session, auth
 from app.use_cases.category import CategoryUseCases
+from fastapi_pagination import add_pagination, Page, LimitOffsetPage
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 
 router = APIRouter(prefix='/category', tags=['Category'], dependencies=[Depends(auth)])
@@ -19,14 +21,15 @@ def add_category(
     return Response(status_code=status.HTTP_201_CREATED)
 
 
-@router.get('/list', response_model=List[CategoryOutput], description="List categories")
+@router.get('/list', response_model=Page[CategoryOutput], description="List categories default")
+@router.get('/list/limit-offset', response_model=LimitOffsetPage[CategoryOutput], description="List categories limit offset")
 def list_categories(
     db_session: Session = Depends(get_db_session)
 ):
     uc = CategoryUseCases(db_session=db_session)
     response = uc.list_categories()
 
-    return response
+    return paginate(response)
 
 
 @router.delete('/delete/{id}', description="Delete category")
@@ -38,3 +41,6 @@ def delete_category(
     uc.delete_category(id=id)
 
     return Response(status_code=status.HTTP_200_OK)
+
+
+add_pagination(router)

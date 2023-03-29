@@ -23,18 +23,43 @@ def test_add_category_route(db_session):
     db_session.commit()
 
 
-def test_list_categories_route(categories_on_db):
+def test_list_categories_route_default(categories_on_db):
     response = client.get('/category/list')
 
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
 
-    assert len(data) == 4
-    assert data[0] == {
+    assert 'items' in data
+    assert len(data['items']) == 4
+    assert data['items'][0] == {
         "name": categories_on_db[0].name,
         "slug": categories_on_db[0].slug,
         "id": categories_on_db[0].id
     }
+
+    assert data['total'] == 4
+    assert data['page'] == 1
+    assert data['size'] == 50
+    assert data['pages'] == 1
+
+
+def test_list_categories_route_limit_offset(categories_on_db):
+    response = client.get('/category/list/limit-offset?limit=2&offset=1')
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+
+    assert 'items' in data
+    assert len(data['items']) == 2
+    assert data['items'][0] == {
+        "name": categories_on_db[1].name,
+        "slug": categories_on_db[1].slug,
+        "id": categories_on_db[1].id
+    }
+
+    assert data['total'] == 4
+    assert data['limit'] == 2
+    assert data['offset'] == 1
 
 
 def test_delete_category_route(db_session):
