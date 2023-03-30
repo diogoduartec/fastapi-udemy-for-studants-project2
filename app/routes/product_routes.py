@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from app.routes.deps import get_db_session, auth
 from app.use_cases.product import ProductUseCases
 from app.schemas.product import Product, ProductInput, ProductOutput
+from fastapi_pagination import add_pagination, Page, LimitOffsetPage
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 
 router = APIRouter(prefix='/product', tags=['Product'], dependencies=[Depends(auth)])
@@ -46,7 +48,8 @@ def delete_product(
     return Response(status_code=status.HTTP_200_OK)
 
 
-@router.get('/list', response_model=List[ProductOutput], description='List products')
+@router.get('/list', response_model=Page[ProductOutput], description='List products default')
+@router.get('/list/limit-offset', response_model=LimitOffsetPage[ProductOutput], description='List products limit offset')
 def list_product(
     search: str = '',
     db_session: Session = Depends(get_db_session)
@@ -54,4 +57,6 @@ def list_product(
     uc = ProductUseCases(db_session=db_session)
     products = uc.list_products(search=search)
 
-    return products
+    return paginate(products)
+
+add_pagination(router)

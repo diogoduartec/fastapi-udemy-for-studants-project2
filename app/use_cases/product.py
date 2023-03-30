@@ -50,14 +50,9 @@ class ProductUseCases:
                 ProductModel.name.ilike(f'%{search}%'),
                 ProductModel.slug.ilike(f'%{search}')
             )
-        ).all()
+        )
 
-        products = [
-            self._serialize_product(product_on_db)
-            for product_on_db in products_on_db
-        ]
-
-        return products
+        return products_on_db
     
     def _serialize_product(self, product_on_db: ProductModel):
         product_dict = product_on_db.__dict__
