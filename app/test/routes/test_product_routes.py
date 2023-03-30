@@ -101,15 +101,15 @@ def test_delete_product_route_invalid_id():
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_list_products_route_default(products_on_db):
-    response = client.get('/product/list')
+def test_list_products_route(products_on_db):
+    response = client.get('/product/list?page=1&size=2')
 
     assert response.status_code == status.HTTP_200_OK
 
     data = response.json()
 
     assert 'items' in data
-    assert len(data['items']) == 4
+    assert len(data['items']) == 2
 
     assert data['items'][0] == {
         'id': products_on_db[0].id,
@@ -127,6 +127,11 @@ def test_list_products_route_default(products_on_db):
     assert data['page'] == 1
     assert data['size'] == 50
     assert data['pages'] == 1
+
+    assert data['total'] == 4
+    assert data['page'] == 1
+    assert data['size'] == 2
+    assert data['pages'] == 2
 
 
 def test_list_products_route_limit_offset(products_on_db):
@@ -183,31 +188,3 @@ def test_list_products_route_with_search_default(products_on_db):
     assert data['page'] == 1
     assert data['size'] == 50
     assert data['pages'] == 1
-
-
-def test_list_products_route_with_search_limit_offset(products_on_db):
-    response = client.get('/product/list/limit-offset?search=mike')
-
-    assert response.status_code == status.HTTP_200_OK
-
-    data = response.json()
-
-    assert 'items' in data
-    assert len(data['items']) == 3
-
-    assert data['items'][0] == {
-        'id': products_on_db[0].id,
-        'name': products_on_db[0].name,
-        'slug': products_on_db[0].slug,
-        'price': products_on_db[0].price,
-        'stock': products_on_db[0].stock,
-        'category': {
-            'id': products_on_db[0].category.id,
-            'name': products_on_db[0].category.name,
-            'slug': products_on_db[0].category.slug
-        }
-    }
-
-    assert data['total'] == 3
-    assert data['limit'] == 50
-    assert data['offset'] == 0

@@ -32,6 +32,6 @@ class ProductInput(CustomBaseModel):
 class ProductOutput(Product):
     id: int
     category: CategoryOutput
-
+    
     class Config:
         orm_mode=True

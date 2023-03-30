@@ -36,6 +36,28 @@ def test_list_categories_route_default(categories_on_db):
         "slug": categories_on_db[0].slug,
         "id": categories_on_db[0].id
     }
+    assert data['total'] == 4
+    assert data['page'] == 1
+    assert data['size'] == 50
+    assert data['pages'] == 1
+
+def test_list_categories_route_not_default_values(categories_on_db):
+    response = client.get('/category/list?page=1&size=2')
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+
+    assert 'items' in data
+    assert len(data['items']) == 2
+    assert data['items'][0] == {
+        "name": categories_on_db[0].name,
+        "slug": categories_on_db[0].slug,
+        "id": categories_on_db[0].id
+    }
+    assert data['total'] == 4
+    assert data['page'] == 1
+    assert data['size'] == 2
+    assert data['pages'] == 2
 
     assert data['total'] == 4
     assert data['page'] == 1
