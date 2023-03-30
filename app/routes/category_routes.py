@@ -29,7 +29,7 @@ def list_categories(
     uc = CategoryUseCases(db_session=db_session)
     response = uc.list_categories(page=page, size=size)
 
-    return paginate(response)
+    return response
 
 
 @router.delete('/delete/{id}', description="Delete category")
@@ -41,6 +41,3 @@ def delete_category(
     uc.delete_category(id=id)
 
     return Response(status_code=status.HTTP_200_OK)
-
-
-add_pagination(router)

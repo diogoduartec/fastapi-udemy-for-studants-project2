@@ -57,6 +57,4 @@ def list_product(
     uc = ProductUseCases(db_session=db_session)
     products = uc.list_products(page=page, size=size, search=search)
 
-    return paginate(products)
-
-add_pagination(router)
+    return products
